@@ -5917,6 +5917,34 @@ sub SIGNALduino_WH25
 	return (1, $dmsg);
 }
 
+sub SIGNALduino_WH31
+{
+	my ($name,$dmsg,$id) = @_;
+
+	my $checksum = 0;
+	my $bitsum = 0;
+	my $byte;
+
+	for (my $i=0; $i<=5; $i++ ) {
+		$byte = hex(substr($dmsg,$i*2,2));
+		$checksum += $byte;
+		$bitsum ^= $byte;
+	}
+	$checksum &= 0xFF;
+	#$bitsum = ($bitsum << 4) | ($bitsum << 4);  # Swap nibbles
+	my $checksumRef = hex(substr($dmsg,12,2));
+	my $bitsumRef = hex(substr($dmsg,12,2));
+	if ($checksum != $checksumRef) {
+		return (-1, "WH31: checksum Error checksum=$checksum checksumRef=$checksumRef");
+	}
+	#if ($bitsum != $bitsumRef) {
+	#	return (-1, "WH31: bitsum Error bitsum=$bitsum bitsumRef=$bitsumRef");
+	#}
+	$bitsum = sprintf('%02X',$bitsum);
+	Log3 $name, 4, "$name WH31: dmsg=$dmsg checksum=$checksum ok, bitsum=0x$bitsum";
+
+	return (1, $dmsg);
+}
 
 sub SIGNALduino_CalculateCRC_W136
 {

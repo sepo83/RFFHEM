@@ -3338,6 +3338,24 @@ our %ProtocolListSIGNALduino  = (
 				clientmodule    => 'WMBUS',
 				#length_min      => '',
 				method          => \&main::SIGNALduino_WMBus,
+			},
+    "211" => # WH31 DP50
+      {
+        name            => 'WH31',
+				changed         => '20220304 new',
+				id              => '211',
+				knownFreqs      => '868.3',
+				N               => [1,6],
+				defaultNoN      => '1',         # wenn 1, dann matchen auch Nachrichten ohne die N Nr
+				datarate        => '17257.69',
+				sync            => '2DD4',
+				modulation      => '2-FSK',
+				cc1101FIFOmode  => '1',      # use FIFOs for RX and TX
+				match           => '^30.*',   # fuer eine regexp Pruefung am Anfang vor dem method Aufruf
+				preamble        => 'W211#',
+				clientmodule    => 'SD_WS',
+				length_min      => '14',     # 7 Byte
+				method        => \&main::SIGNALduino_WH31,
 			}
 		########################################################################
 		#### ### old information from incomplete implemented protocols #### ####
